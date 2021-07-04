@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>assets/icons/close-file.png</file>
+    <file>assets/icons/add.png</file>
+    <file>assets/icons/close.png</file>
+    <file>assets/icons/maximize.png</file>
+    <file>assets/icons/icon.png</file>
+    <file>assets/icons/icon-top.png</file>
+    <file>assets/icons/minimize.png</file>
+    <file>assets/icons/resize.png</file>
+  </qresource>
+</RCC>
