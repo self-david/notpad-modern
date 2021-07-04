@@ -12,7 +12,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 
-from codeeditor import CodeEditor
+from modules.codeeditor import CodeEditor
 
 import sources_rc
 
@@ -213,10 +213,10 @@ class Ui_MainWindow(object):
         self.file_layout_1.setSpacing(0)
         self.file_layout_1.setObjectName(u"file_layout_1")
         self.file_layout_1.setContentsMargins(0, 0, 5, 0)
-        self.lbl_1 = QLabel(self.file_1)
-        self.lbl_1.setObjectName(u"lbl_1")
+        self.title_1 = QLabel(self.file_1)
+        self.title_1.setObjectName(u"title_1")
 
-        self.file_layout_1.addWidget(self.lbl_1)
+        self.file_layout_1.addWidget(self.title_1)
 
         self.btn_close_1 = QPushButton(self.file_1)
         self.btn_close_1.setObjectName(u"btn_close_1")
@@ -410,7 +410,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.lbl_1.setText(QCoreApplication.translate("MainWindow", u"main.py", None))
+        self.title_1.setText(QCoreApplication.translate("MainWindow", u"main.py", None))
         self.btn_close_1.setText("")
         self.btn_add.setText("")
         self.btn_minimize.setText("")

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>924</width>
-    <height>638</height>
+    <width>879</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,13 @@
   <property name="styleSheet">
    <string notr="true">* {
 border: none;
+font-family: &quot;segoe UI&quot;;
+}
+
+QToolTip {
+margin: 0;
+background: #3C3C3C;
+color: #ccc;
 }
 
 /*BEGIN TOP*/
@@ -47,8 +54,8 @@ background-repeat: no-repeat;
 background-image: url(:/icons/assets/icons/icon-top.png), url(:/icons/assets/icons/close.png);
 
 text-align: left;
-padding-left: 35px;
-padding-right: 10px;
+padding-left: 32px;
+padding-right: 3px;
 color: #E8EBEA;
 }
 
@@ -57,9 +64,8 @@ color: #E8EBEA;
 
 }
 
-#pages &gt; Qframe:hover {
-color: #3C3C3C;
-background-color: #E8EBEA;
+#pages &gt; QFrame:hover {
+background-color: rgba(255, 255, 255, 30);
 }
 
 /*END TOP*/
@@ -76,13 +82,32 @@ border-bottom: 1px solid #3C3C3C;
 #menu &gt; QPushButton {
 background: transparent;
 padding: 4px 5px;
-border-radius: 2px;
-color: #fff;
+border: none;
+border-radius: 0;
+color: #ccc;
 font-size: 9pt;
 }
 #menu &gt; QPushButton:hover {
+color: #fff;
 background: #505050;
 }
+
+QMenu {
+background: #252526;
+color: #ccc;
+border: 1px solid #252526;
+}
+
+QMenu::item:selected { /* when user selects item using mouse or keyboard */
+background-color: #094771;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: #616161;
+	margin: 10px 10px, 10px, 17px;
+}
+
 
 /*END MENU*/
 /******************************************************/
@@ -168,9 +193,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none;
 QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal { background: none; }
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: none; }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-
-</string>
+/* ///////////////////////////////////////////////////////////////////////////////////////////////// */</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -268,6 +291,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
               <height>0</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>New File.txt</string>
+            </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
             </property>
@@ -279,7 +305,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
               <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>4</number>
              </property>
              <property name="topMargin">
               <number>0</number>
@@ -291,9 +317,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
               <number>0</number>
              </property>
              <item>
-              <widget class="QLabel" name="lbl_1">
+              <widget class="QLabel" name="title_1">
                <property name="text">
-                <string>main.py</string>
+                <string>New File.txt</string>
                </property>
               </widget>
              </item>
@@ -472,7 +498,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
         <number>1</number>
        </property>
        <property name="leftMargin">
-        <number>10</number>
+        <number>0</number>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -485,6 +511,18 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
        </property>
        <item>
         <widget class="QPushButton" name="file">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>36</height>
+          </size>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -494,7 +532,19 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_5">
+        <widget class="QPushButton" name="edition">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>36</height>
+          </size>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -504,7 +554,19 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_6">
+        <widget class="QPushButton" name="format">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>36</height>
+          </size>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -514,7 +576,19 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="view">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>36</height>
+          </size>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -524,7 +598,19 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="help">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>36</height>
+          </size>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -650,21 +736,28 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="lbl_creator">
+         <property name="text">
+          <string>By: BacoDevs.com</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lbl_line">
          <property name="text">
           <string>line 1, column 4</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="lbl_format_writer">
          <property name="text">
           <string>Windows (CFLF)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="lbl_format">
          <property name="text">
           <string>UTF-8</string>
          </property>
@@ -718,11 +811,11 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
   <customwidget>
    <class>CodeEditor</class>
    <extends>QPlainTextEdit</extends>
-   <header location="global">codeeditor.h</header>
+   <header location="global">modules/codeeditor.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="sources.qrc"/>
+  <include location="../sources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -12,7 +12,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 
-from codeeditor import CodeEditor
+from modules.codeeditor import CodeEditor
 
 import sources_rc
 
@@ -20,9 +20,16 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(924, 638)
+        MainWindow.resize(879, 657)
         MainWindow.setStyleSheet(u"* {\n"
 "border: none;\n"
+"font-family: \"segoe UI\";\n"
+"}\n"
+"\n"
+"QToolTip {\n"
+"margin: 0;\n"
+"background: #3C3C3C;\n"
+"color: #ccc;\n"
 "}\n"
 "\n"
 "/*BEGIN TOP*/\n"
@@ -42,26 +49,31 @@ class Ui_MainWindow(object):
 "#btn_add { image: url(:/icons/assets/icons/add.png); }\n"
 "\n"
 "#pages { padding-top: 5px; }\n"
-"#pages > QPushButton {\n"
-"background-position: left center;\n"
-"background-repeat: no-repeat;\n"
-"background-image: url(:/icons/assets/icons/icon-top.png), url(:/icons/assets/icons/close.png);\n"
 "\n"
-"color: #fff;\n"
-"background-color: #3C3C3C;\n"
-"\n"
-"text-align: left;\n"
-"padding-left: 35px;\n"
-"padding-right: 10p"
-                        "x;\n"
-"\n"
+"#pages > QFrame {\n"
 "border-top-left-radius: 4px;\n"
 "border-top-right-radius: 4px;\n"
 "}\n"
 "\n"
-"#pages > QPushButton:hover {\n"
-"color: #3C3C3C;\n"
-"background-color: #E8EBEA;\n"
+"#pages > QFrame > QLabel {\n"
+"background-position: left center;\n"
+"background-repeat: no-repeat;\n"
+""
+                        "background-image: url(:/icons/assets/icons/icon-top.png), url(:/icons/assets/icons/close.png);\n"
+"\n"
+"text-align: left;\n"
+"padding-left: 32px;\n"
+"padding-right: 3px;\n"
+"color: #E8EBEA;\n"
+"}\n"
+"\n"
+"#pages > QFrame > QPushButton {\n"
+"	image: url(:/icons/assets/icons/close.png);\n"
+"\n"
+"}\n"
+"\n"
+"#pages > QFrame:hover {\n"
+"background-color: rgba(255, 255, 255, 30);\n"
 "}\n"
 "\n"
 "/*END TOP*/\n"
@@ -78,13 +90,33 @@ class Ui_MainWindow(object):
 "#menu > QPushButton {\n"
 "background: transparent;\n"
 "padding: 4px 5px;\n"
-"border-radius: 2px;\n"
-"color: #fff;\n"
+"border: none;\n"
+"border-radius: 0;\n"
+"color: #ccc;\n"
 "font-size: 9pt;\n"
 "}\n"
 "#menu > QPushButton:hover {\n"
+"color: #fff;\n"
 "background: #505050;\n"
 "}\n"
+"\n"
+"QMenu {\n"
+"background: #252526;\n"
+"color: #ccc;\n"
+"border: 1px solid #252526;\n"
+"}\n"
+"\n"
+"QMenu::item:selected { /* when user selects item using mous"
+                        "e or keyboard */\n"
+"background-color: #094771;\n"
+"}\n"
+"\n"
+"QMenu::separator {\n"
+"    height: 1px;\n"
+"    background: #616161;\n"
+"	margin: 10px 10px, 10px, 17px;\n"
+"}\n"
+"\n"
 "\n"
 "/*END MENU*/\n"
 "/******************************************************/\n"
@@ -106,8 +138,7 @@ class Ui_MainWindow(object):
 "border-top: 1px solid #3C3C3C;\n"
 "}\n"
 "\n"
-""
-                        "\n"
+"\n"
 "/*END CENTER*/\n"
 "/******************************************************/\n"
 "\n"
@@ -131,7 +162,8 @@ class Ui_MainWindow(object):
 "#resize {\n"
 "image: url(:/icons/assets/icons/resize.png);\n"
 "}\n"
-"\n"
+""
+                        "\n"
 "/*END BOTTOM*/\n"
 "/******************************************************/")
         self.App = QWidget(MainWindow)
@@ -171,9 +203,7 @@ class Ui_MainWindow(object):
                         "nd: none; }\n"
 "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: none; }\n"
 "\n"
-"/* /////////////////////////////////////////////////////////////////////////////////////////////////\n"
-"\n"
-"")
+"/* ///////////////////////////////////////////////////////////////////////////////////////////////// */")
         self.verticalLayout = QVBoxLayout(self.App)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -198,10 +228,28 @@ class Ui_MainWindow(object):
         self.Layout_pages.setSpacing(0)
         self.Layout_pages.setObjectName(u"Layout_pages")
         self.Layout_pages.setContentsMargins(1, 0, 0, 0)
-        self.file_1 = QPushButton(self.pages)
+        self.file_1 = QFrame(self.pages)
         self.file_1.setObjectName(u"file_1")
-        self.file_1.setMinimumSize(QSize(0, 45))
-        self.file_1.setCursor(QCursor(Qt.PointingHandCursor))
+        self.file_1.setMinimumSize(QSize(100, 0))
+        self.file_1.setFrameShape(QFrame.StyledPanel)
+        self.file_1.setFrameShadow(QFrame.Raised)
+        self.file_layout_1 = QHBoxLayout(self.file_1)
+        self.file_layout_1.setSpacing(0)
+        self.file_layout_1.setObjectName(u"file_layout_1")
+        self.file_layout_1.setContentsMargins(4, 0, 5, 0)
+        self.title_1 = QLabel(self.file_1)
+        self.title_1.setObjectName(u"title_1")
+
+        self.file_layout_1.addWidget(self.title_1)
+
+        self.btn_close_1 = QPushButton(self.file_1)
+        self.btn_close_1.setObjectName(u"btn_close_1")
+        self.btn_close_1.setMinimumSize(QSize(28, 28))
+        self.btn_close_1.setMaximumSize(QSize(28, 28))
+        self.btn_close_1.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.file_layout_1.addWidget(self.btn_close_1)
+
 
         self.Layout_pages.addWidget(self.file_1)
 
@@ -266,36 +314,46 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QHBoxLayout(self.menu)
         self.horizontalLayout_2.setSpacing(1)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalLayout_2.setContentsMargins(10, 0, 0, 0)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.file = QPushButton(self.menu)
         self.file.setObjectName(u"file")
+        self.file.setMinimumSize(QSize(0, 36))
+        self.file.setMaximumSize(QSize(16777215, 36))
         self.file.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.horizontalLayout_2.addWidget(self.file)
 
-        self.pushButton_5 = QPushButton(self.menu)
-        self.pushButton_5.setObjectName(u"pushButton_5")
-        self.pushButton_5.setCursor(QCursor(Qt.PointingHandCursor))
+        self.edition = QPushButton(self.menu)
+        self.edition.setObjectName(u"edition")
+        self.edition.setMinimumSize(QSize(0, 36))
+        self.edition.setMaximumSize(QSize(16777215, 36))
+        self.edition.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontalLayout_2.addWidget(self.pushButton_5)
+        self.horizontalLayout_2.addWidget(self.edition)
 
-        self.pushButton_6 = QPushButton(self.menu)
-        self.pushButton_6.setObjectName(u"pushButton_6")
-        self.pushButton_6.setCursor(QCursor(Qt.PointingHandCursor))
+        self.format = QPushButton(self.menu)
+        self.format.setObjectName(u"format")
+        self.format.setMinimumSize(QSize(0, 36))
+        self.format.setMaximumSize(QSize(16777215, 36))
+        self.format.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontalLayout_2.addWidget(self.pushButton_6)
+        self.horizontalLayout_2.addWidget(self.format)
 
-        self.pushButton_2 = QPushButton(self.menu)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setCursor(QCursor(Qt.PointingHandCursor))
+        self.view = QPushButton(self.menu)
+        self.view.setObjectName(u"view")
+        self.view.setMinimumSize(QSize(0, 36))
+        self.view.setMaximumSize(QSize(16777215, 36))
+        self.view.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontalLayout_2.addWidget(self.pushButton_2)
+        self.horizontalLayout_2.addWidget(self.view)
 
-        self.pushButton_3 = QPushButton(self.menu)
-        self.pushButton_3.setObjectName(u"pushButton_3")
-        self.pushButton_3.setCursor(QCursor(Qt.PointingHandCursor))
+        self.help = QPushButton(self.menu)
+        self.help.setObjectName(u"help")
+        self.help.setMinimumSize(QSize(0, 36))
+        self.help.setMaximumSize(QSize(16777215, 36))
+        self.help.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontalLayout_2.addWidget(self.pushButton_3)
+        self.horizontalLayout_2.addWidget(self.help)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -345,20 +403,25 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setSpacing(10)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.horizontalLayout_3.setContentsMargins(10, 0, 0, 0)
-        self.label = QLabel(self.bottom)
-        self.label.setObjectName(u"label")
+        self.lbl_creator = QLabel(self.bottom)
+        self.lbl_creator.setObjectName(u"lbl_creator")
 
-        self.horizontalLayout_3.addWidget(self.label)
+        self.horizontalLayout_3.addWidget(self.lbl_creator)
 
-        self.label_2 = QLabel(self.bottom)
-        self.label_2.setObjectName(u"label_2")
+        self.lbl_line = QLabel(self.bottom)
+        self.lbl_line.setObjectName(u"lbl_line")
 
-        self.horizontalLayout_3.addWidget(self.label_2)
+        self.horizontalLayout_3.addWidget(self.lbl_line)
 
-        self.label_3 = QLabel(self.bottom)
-        self.label_3.setObjectName(u"label_3")
+        self.lbl_format_writer = QLabel(self.bottom)
+        self.lbl_format_writer.setObjectName(u"lbl_format_writer")
 
-        self.horizontalLayout_3.addWidget(self.label_3)
+        self.horizontalLayout_3.addWidget(self.lbl_format_writer)
+
+        self.lbl_format = QLabel(self.bottom)
+        self.lbl_format.setObjectName(u"lbl_format")
+
+        self.horizontalLayout_3.addWidget(self.lbl_format)
 
         self.horizontalSpacer_3 = QSpacerItem(601, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -386,152 +449,24 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.file_1.setText(QCoreApplication.translate("MainWindow", u"file.txt", None))
+#if QT_CONFIG(tooltip)
+        self.file_1.setToolTip(QCoreApplication.translate("MainWindow", u"New File.txt", None))
+#endif // QT_CONFIG(tooltip)
+        self.title_1.setText(QCoreApplication.translate("MainWindow", u"New File.txt", None))
+        self.btn_close_1.setText("")
         self.btn_add.setText("")
         self.btn_minimize.setText("")
         self.btn_maximize.setText("")
         self.btn_close.setText("")
         self.file.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Ediccion", None))
-        self.pushButton_6.setText(QCoreApplication.translate("MainWindow", u"Formato", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Ver", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Ayuda", None))
-        self.document_1.setPlainText(QCoreApplication.translate("MainWindow", u"\n"
-"fd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"dfd\n"
-"ffd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"fd\n"
-"\n"
-"d\n"
-"d", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"line 1, column 4", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Windows (CFLF)", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"UTF-8", None))
+        self.edition.setText(QCoreApplication.translate("MainWindow", u"Ediccion", None))
+        self.format.setText(QCoreApplication.translate("MainWindow", u"Formato", None))
+        self.view.setText(QCoreApplication.translate("MainWindow", u"Ver", None))
+        self.help.setText(QCoreApplication.translate("MainWindow", u"Ayuda", None))
+        self.document_1.setPlainText("")
+        self.lbl_creator.setText(QCoreApplication.translate("MainWindow", u"By: BacoDevs.com", None))
+        self.lbl_line.setText(QCoreApplication.translate("MainWindow", u"line 1, column 4", None))
+        self.lbl_format_writer.setText(QCoreApplication.translate("MainWindow", u"Windows (CFLF)", None))
+        self.lbl_format.setText(QCoreApplication.translate("MainWindow", u"UTF-8", None))
     # retranslateUi
 

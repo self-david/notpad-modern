@@ -1,28 +1,24 @@
+from os import device_encoding
 import sys
 from PyQt5 import QtCore
-from PyQt5.QtCore import QSize, pyqtRemoveInputHook, Qt
-from PyQt5.QtWidgets import QLabel, QMainWindow, QApplication, QGraphicsDropShadowEffect, QPushButton, QFrame, QWidget, QVBoxLayout, QHBoxLayout
+from PyQt5.QtCore import QPoint, pyqtRemoveInputHook
+from PyQt5.QtWidgets import QAction, QMainWindow, QApplication, QGraphicsDropShadowEffect, QPushButton, QMenu, QWidget
 from PyQt5 import uic
 from PyQt5.QtGui import *
-from PyQt5.uic.properties import QtGui
-Ui_MainWindow, QtBaseClass = uic.loadUiType('m.ui')
-from codeeditor import CodeEditor
+from PyQt5.uic.properties import QtWidgets
+Ui_MainWindow, QtBaseClass = uic.loadUiType('./ui/mainWindows.ui')
+
+from modules import tabs
+from modules import menu
 
 
 class MyApp(QMainWindow):
 	def __init__(self):
 		self.newLines = 1
 		super(MyApp, self).__init__(None)
-		# menuBar = self.menuBar()
-		# fileMenu = menuBar.addMenu('&File')
 
-		# # New Action
-		# self.newAction = QAction('&New', self)
-		# self.newAction.triggered.connect(self.NewCall)
-		# fileMenu.addAction(self.newAction)
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
-
 
 		flags = QtCore.Qt.WindowFlags(QtCore.Qt.Dialog)
 		self.setWindowFlags(flags|QtCore.Qt.FramelessWindowHint |QtCore.Qt.CustomizeWindowHint)
@@ -39,6 +35,7 @@ class MyApp(QMainWindow):
 		self.shadow.setColor(QColor(0,0,0,200))
 		self.ui.App.setGraphicsEffect(self.shadow)
 
+		self.moving = False
 
 		self.ui.btn_close.clicked.connect(self.close)
 		self.ui.btn_maximize.clicked.connect(self.maximized)
@@ -49,15 +46,18 @@ class MyApp(QMainWindow):
 		
 		self.before_select = self.ui.file_1
 		self.ui.file_1.setStyleSheet(self.ui.file_1.styleSheet()+self.style_active)
-		self.ui.btn_close_1.setStyleSheet(self.ui.btn_close_1.styleSheet()+self.style_active_close)
-		
 		self.ui.file_1.mousePressEvent = lambda x: self.change_actual(None, self.ui.file_1)
+		self.ui.btn_close_1.setStyleSheet(self.ui.btn_close_1.styleSheet()+self.style_active_close)
+		self.ui.btn_close_1.clicked.connect(lambda: tabs.remove(self))
 
+		# stack de tabs
+		self.stacked_tabs = [self.ui.file_1]
 
-		self.ui.btn_add.clicked.connect(self.add)
+		# crear nuevo tab al dar click
+		self.ui.btn_add.clicked.connect(lambda: tabs.add(self))
 
-
-		self.file_number = 2
+		# indice del tab creado
+		self.tab_number = 2
 		
 
 		# self.ui.center.setStretchFactor(0, 4)
@@ -66,72 +66,45 @@ class MyApp(QMainWindow):
 		self.ui.document_1.setFocus()
 
 
-
-	def add(self):
-    	# Creacion del header file
-		block = QFrame(self.ui.pages)
-		block.setObjectName(u"file_"+str(self.file_number))
-		block.setMinimumHeight(45)
-		block.setMaximumHeight(45)
-		block.setFrameShape(QFrame.StyledPanel)
-		block.setFrameShadow(QFrame.Raised)
-
-		block.mousePressEvent = lambda x: self.change_actual(None, block)
-
-		file_layout = QHBoxLayout(block)
-		file_layout.setSpacing(0)
-		file_layout.setObjectName(u"file_layout_"+str(self.file_number))
-		file_layout.setContentsMargins(0, 0, 5, 0)
 		
-		self.lbl_1 = QLabel("Nuevo archivo *", block)
-		self.lbl_1.setObjectName(u"lbl_1")
 
-		btn_close = QPushButton(block)
-		btn_close.setObjectName(u"btn_close_"+str(self.file_number))
-		btn_close.setMinimumSize(QSize(28, 28))
-		btn_close.setMaximumSize(QSize(28, 28))
-		btn_close.setCursor(QCursor(Qt.PointingHandCursor))
+		
+		menu.file(self)
+		self.ui.file.clicked.connect(lambda : self.menu(self.menu_file))
+		menu.edition(self)
+		self.ui.edition.clicked.connect(lambda : self.menu(self.menu_edition))
+		
+		self.ui.format.clicked.connect(self.menu)
+		self.ui.view.clicked.connect(self.menu)
+		self.ui.help.clicked.connect(self.menu)
 
-		file_layout.addWidget(self.lbl_1)
-		file_layout.addWidget(btn_close)
-		self.ui.Layout_pages.addWidget(block)
-
-
+		
 
 
-		# Creacion del text box
-		widget = QWidget()
-		widget.setObjectName(u"page_"+str(self.file_number))
-		# creacion del layout
-		widget_layout = QVBoxLayout(widget)
-		widget_layout.setSpacing(0)
-		widget_layout.setObjectName(u"widget_layout_"+str(self.file_number))
-		widget_layout.setContentsMargins(0, 0, 0, 0)
-		# Creacion del textbox
-		textbox = CodeEditor(widget)
-		textbox.setObjectName(u"document_"+str(self.file_number))
-		textbox.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-
-		widget_layout.addWidget(textbox)
+	def imprimir(self):
+		print("se pudo")
 
 
-		self.ui.stackedWidget.addWidget(widget)
+	def menu(self, menu):
+		menu.exec_(self.pos()+ QPoint(10,96)  + self.sender().pos())
 
 
-		self.file_number += 1
-	
+	def count(self):
+		print([tab.objectName() for tab in self.stacked_tabs])
+
 	def change_actual(self, event, sender):
-		# Obtenemos el numero anterio del archivo
-		before_number = self.before_select.objectName().split("_")[-1]
+		if self.before_select != None:
+			# Obtenemos el numero anterio del archivo
+			before_number = self.before_select.objectName().split("_")[-1]
+
+			# borro el estilo del anterior
+			self.before_select.setStyleSheet(self.before_select.styleSheet().replace(self.style_active, ""))
+			# Borrar el estilo del close anterio
+			btn_before_close = self.before_select.findChild(QPushButton, "btn_close_"+before_number)
+			btn_before_close.setStyleSheet(btn_before_close.styleSheet().replace(self.style_active_close, ""))
+
 		# Obtenemos el numero del archivo
 		number_actual = sender.objectName().split("_")[-1]
-
-		# borro el estilo del anterior
-		self.before_select.setStyleSheet(self.before_select.styleSheet().replace(self.style_active, ""))
-		# Borrar el estilo del close anterio
-		btn_before_close = self.before_select.findChild(QPushButton, "btn_close_"+before_number)
-		btn_before_close.setStyleSheet(btn_before_close.styleSheet().replace(self.style_active_close, ""))
-
 
 		# agrego el estilo al nuevo
 		sender.setStyleSheet(sender.styleSheet()+self.style_active)
@@ -146,6 +119,9 @@ class MyApp(QMainWindow):
 		page = self.ui.stackedWidget.findChild(QWidget, "page_"+number_actual)
 		self.ui.stackedWidget.setCurrentWidget(page)
 
+		self.moving = False
+
+		self.count()
 
 		
 	def maximized(self, event):
@@ -153,10 +129,14 @@ class MyApp(QMainWindow):
 			self.showMaximized()
 		else:
 			self.showNormal()
-	
+		self.ui.pages.setMaximumWidth(self.ui.top.width() - self.ui.basic_buttons.width() - self.ui.btn_add.width() - 21)
+		print(self.ui.top.width(), self.ui.basic_buttons.width(), self.ui.pages.width())
+
 
 	def moveWindow(self, event):
 		# MOVE WINDOW
+		if not self.moving:
+			return
 		if event.buttons() == QtCore.Qt.LeftButton:
 			if self.isMaximized():
 				self.showNormal()
@@ -166,6 +146,7 @@ class MyApp(QMainWindow):
 
 	def mousePressEvent(self, event):
 		# SET DRAG POS WINDOW
+		self.moving = True
 		self.dragPos =  event.globalPos() - self.frameGeometry().topLeft()
 
 
