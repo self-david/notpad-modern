@@ -2,14 +2,16 @@ from os import device_encoding
 import sys
 from PyQt5 import QtCore
 from PyQt5.QtCore import QPoint, pyqtRemoveInputHook
-from PyQt5.QtWidgets import QAction, QMainWindow, QApplication, QGraphicsDropShadowEffect, QPushButton, QMenu, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QGraphicsDropShadowEffect, QPushButton, QSizeGrip, QWidget
 from PyQt5 import uic
 from PyQt5.QtGui import *
-from PyQt5.uic.properties import QtWidgets
 Ui_MainWindow, QtBaseClass = uic.loadUiType('./ui/mainWindows.ui')
 
 from modules import tabs
 from modules import menu
+from modules.custom_grips import CustomGrip
+
+from modules.functions import Primitive
 
 
 class MyApp(QMainWindow):
@@ -20,29 +22,24 @@ class MyApp(QMainWindow):
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
 
-		flags = QtCore.Qt.WindowFlags(QtCore.Qt.Dialog)
-		self.setWindowFlags(flags|QtCore.Qt.FramelessWindowHint |QtCore.Qt.CustomizeWindowHint)
-		self.setAttribute(QtCore.Qt.WA_TranslucentBackground)#fondo de la ventana transparente
+		self.primitive = Primitive(self, self.ui.top)
+
+		# elimina los bordes de la ventana
+		self.primitive.borderless()
+		# genera una sobre al rededor de la ventana
+		self.primitive.border_shadow(self.ui.App)
+		# permite el resize por medio de los bordes (require actualizar con resize_grip())
+		self.primitive.border_grip(self.ui.resize)
+
 
 		self.style_active = "color: #3C3C3C; background-color: #E8EBEA;"
 		self.style_active_close = "image: url(:/icons/assets/icons/close-file.png);"
 		
-		# DROP SHADOW
-		self.shadow = QGraphicsDropShadowEffect(self)
-		self.shadow.setBlurRadius(20)
-		self.shadow.setXOffset(0)
-		self.shadow.setYOffset(0)
-		self.shadow.setColor(QColor(0,0,0,200))
-		self.ui.App.setGraphicsEffect(self.shadow)
-
-		self.moving = False
 
 		self.ui.btn_close.clicked.connect(self.close)
-		self.ui.btn_maximize.clicked.connect(self.maximized)
+		self.ui.btn_maximize.clicked.connect(self.primitive.maximize_restore)
 		self.ui.btn_minimize.clicked.connect(self.showMinimized)
 
-		self.ui.top.mouseMoveEvent = self.moveWindow
-		self.ui.top.mouseDoubleClickEvent = self.maximized
 		
 		self.before_select = self.ui.file_1
 		self.ui.file_1.setStyleSheet(self.ui.file_1.styleSheet()+self.style_active)
@@ -67,18 +64,18 @@ class MyApp(QMainWindow):
 
 
 		
-
-		
 		menu.file(self)
 		self.ui.file.clicked.connect(lambda : self.menu(self.menu_file))
 		menu.edition(self)
 		self.ui.edition.clicked.connect(lambda : self.menu(self.menu_edition))
-		
-		self.ui.format.clicked.connect(self.menu)
-		self.ui.view.clicked.connect(self.menu)
-		self.ui.help.clicked.connect(self.menu)
+		menu.format(self)
+		self.ui.format.clicked.connect(lambda : self.menu(self.menu_format))
+		menu.view(self)
+		self.ui.view.clicked.connect(lambda : self.menu(self.menu_view))
+		menu.help(self)
+		self.ui.help.clicked.connect(lambda : self.menu(self.menu_help))
 
-		
+
 
 
 	def imprimir(self):
@@ -92,16 +89,16 @@ class MyApp(QMainWindow):
 	def count(self):
 		print([tab.objectName() for tab in self.stacked_tabs])
 
-	def change_actual(self, event, sender):
-		if self.before_select != None:
-			# Obtenemos el numero anterio del archivo
-			before_number = self.before_select.objectName().split("_")[-1]
 
-			# borro el estilo del anterior
-			self.before_select.setStyleSheet(self.before_select.styleSheet().replace(self.style_active, ""))
-			# Borrar el estilo del close anterio
-			btn_before_close = self.before_select.findChild(QPushButton, "btn_close_"+before_number)
-			btn_before_close.setStyleSheet(btn_before_close.styleSheet().replace(self.style_active_close, ""))
+	def change_actual(self, event, sender):
+		# Obtenemos el numero anterio del archivo
+		before_number = self.before_select.objectName().split("_")[-1]
+
+		# borro el estilo del anterior
+		self.before_select.setStyleSheet(self.before_select.styleSheet().replace(self.style_active, ""))
+		# Borrar el estilo del close anterio
+		btn_before_close = self.before_select.findChild(QPushButton, "btn_close_"+before_number)
+		btn_before_close.setStyleSheet(btn_before_close.styleSheet().replace(self.style_active_close, ""))
 
 		# Obtenemos el numero del archivo
 		number_actual = sender.objectName().split("_")[-1]
@@ -124,30 +121,12 @@ class MyApp(QMainWindow):
 		self.count()
 
 		
-	def maximized(self, event):
-		if not self.isMaximized():
-			self.showMaximized()
-		else:
-			self.showNormal()
-		self.ui.pages.setMaximumWidth(self.ui.top.width() - self.ui.basic_buttons.width() - self.ui.btn_add.width() - 21)
-		print(self.ui.top.width(), self.ui.basic_buttons.width(), self.ui.pages.width())
 
+	def resizeEvent(self, event):
+		self.primitive.resize_grip()		
+		# self.ui.pages.setMaximumWidth(self.ui.top.width() - self.ui.basic_buttons.width() - self.ui.btn_add.width() - 21)
+		# print(self.ui.top.width(), self.ui.basic_buttons.width(), self.ui.pages.width())
 
-	def moveWindow(self, event):
-		# MOVE WINDOW
-		if not self.moving:
-			return
-		if event.buttons() == QtCore.Qt.LeftButton:
-			if self.isMaximized():
-				self.showNormal()
-			self.move(event.globalPos() - self.dragPos)
-			event.accept()
-
-
-	def mousePressEvent(self, event):
-		# SET DRAG POS WINDOW
-		self.moving = True
-		self.dragPos =  event.globalPos() - self.frameGeometry().topLeft()
 
 
 

@@ -58,30 +58,36 @@ def add(self):
 
 
 def remove(self):
-		#verificar si el archivo se ha guardado
+	#verificar si el archivo se ha guardado
 
 	# obtengo el indice del tab a eliminar
 	number_actual = self.sender().objectName().split("_")[-1]
-	# verifico si el ultimo tab seleccionado ya fue elimininado
-	if  self.before_select != None:
-		# si no es asi, verifico si el ultimo tab seleccionado es el mismo al que se desea eliminar
-		number_before = self.before_select.objectName().split("_")[-1]
-		# si es asi, entonces elimino la referencia al tab
-		if number_actual == number_before:
-			self.before_select = None
+	
 	# Elimino el tab
 	tab = self.ui.top.findChild(QFrame, "file_"+number_actual)
 	tab.deleteLater()
-	# remuevo el tab del stack
-	self.stacked_tabs.remove(tab)
 	#elimino la pagina textbox
 	page = self.ui.stackedWidget.findChild(QWidget, "page_"+number_actual)
 	page.deleteLater()
+	# remuevo el tab del stack
+	self.stacked_tabs.remove(tab)
 
 	# si mi stack se quedo sin tab debe cerrar la ventana
 	if len(self.stacked_tabs) == 0:
 		self.close()
 		return
+
+	# verifico si el ultimo tab seleccionado es el mismo al que se desea eliminar
+	number_before = self.before_select.objectName().split("_")[-1]
+	# si es asi, entonces elimino la referencia al tab
+	if number_actual == number_before:
+		# Cambiar el tab seleccionado
+		self.change_actual(None, self.stacked_tabs[0])
+		self.before_select = self.stacked_tabs[0]
+
+
+
+
 	
-	self.change_actual(None, self.stacked_tabs[0])
+	
 	

@@ -172,14 +172,15 @@ class Ui_MainWindow(object):
 "ScrollBars */\n"
 " QScrollBar:vertical {\n"
 "	border: none;\n"
-"    background: rgba(255, 255, 255, 35);\n"
-"    width: 20px;\n"
+"    background: transparent;\n"
+"    width: 15px;\n"
 "    margin: 0px;\n"
+"border-left: 1px solid rgba(255, 255, 255, 35);\n"
 " }\n"
 "\n"
 "\n"
 " QScrollBar::handle:vertical {	\n"
-"	background: rgba(255, 255, 255, 175);\n"
+"	background: rgba(255, 255, 255, 35);\n"
 "    min-height: 25px;\n"
 " }\n"
 " QScrollBar::add-line:vertical {\n"
@@ -199,15 +200,15 @@ class Ui_MainWindow(object):
 "\n"
 "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical { background: none; }\n"
 "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none; }\n"
-"QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal { backgrou"
-                        "nd: none; }\n"
+"QScrollBar::up-arrow:horizontal, QScro"
+                        "llBar::down-arrow:horizontal { background: none; }\n"
 "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: none; }\n"
 "\n"
 "/* ///////////////////////////////////////////////////////////////////////////////////////////////// */")
-        self.verticalLayout = QVBoxLayout(self.App)
-        self.verticalLayout.setSpacing(0)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+        self.AppMargins = QVBoxLayout(self.App)
+        self.AppMargins.setSpacing(0)
+        self.AppMargins.setObjectName(u"AppMargins")
+        self.AppMargins.setContentsMargins(10, 10, 10, 10)
         self.top = QFrame(self.App)
         self.top.setObjectName(u"top")
         self.top.setMinimumSize(QSize(0, 50))
@@ -230,7 +231,7 @@ class Ui_MainWindow(object):
         self.Layout_pages.setContentsMargins(1, 0, 0, 0)
         self.file_1 = QFrame(self.pages)
         self.file_1.setObjectName(u"file_1")
-        self.file_1.setMinimumSize(QSize(100, 0))
+        self.file_1.setMinimumSize(QSize(0, 0))
         self.file_1.setFrameShape(QFrame.StyledPanel)
         self.file_1.setFrameShadow(QFrame.Raised)
         self.file_layout_1 = QHBoxLayout(self.file_1)
@@ -250,6 +251,8 @@ class Ui_MainWindow(object):
 
         self.file_layout_1.addWidget(self.btn_close_1)
 
+        self.btn_close_1.raise_()
+        self.title_1.raise_()
 
         self.Layout_pages.addWidget(self.file_1)
 
@@ -303,7 +306,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.basic_buttons)
 
 
-        self.verticalLayout.addWidget(self.top)
+        self.AppMargins.addWidget(self.top)
 
         self.menu = QFrame(self.App)
         self.menu.setObjectName(u"menu")
@@ -360,7 +363,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
 
-        self.verticalLayout.addWidget(self.menu)
+        self.AppMargins.addWidget(self.menu)
 
         self.center = QSplitter(self.App)
         self.center.setObjectName(u"center")
@@ -391,7 +394,7 @@ class Ui_MainWindow(object):
         self.txt_cmd.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.center.addWidget(self.txt_cmd)
 
-        self.verticalLayout.addWidget(self.center)
+        self.AppMargins.addWidget(self.center)
 
         self.bottom = QFrame(self.App)
         self.bottom.setObjectName(u"bottom")
@@ -438,7 +441,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.resize)
 
 
-        self.verticalLayout.addWidget(self.bottom)
+        self.AppMargins.addWidget(self.bottom)
 
         MainWindow.setCentralWidget(self.App)
 
@@ -455,8 +458,17 @@ class Ui_MainWindow(object):
         self.title_1.setText(QCoreApplication.translate("MainWindow", u"New File.txt", None))
         self.btn_close_1.setText("")
         self.btn_add.setText("")
+#if QT_CONFIG(tooltip)
+        self.btn_minimize.setToolTip(QCoreApplication.translate("MainWindow", u"Minimize", None))
+#endif // QT_CONFIG(tooltip)
         self.btn_minimize.setText("")
+#if QT_CONFIG(tooltip)
+        self.btn_maximize.setToolTip(QCoreApplication.translate("MainWindow", u"Maximize", None))
+#endif // QT_CONFIG(tooltip)
         self.btn_maximize.setText("")
+#if QT_CONFIG(tooltip)
+        self.btn_close.setToolTip(QCoreApplication.translate("MainWindow", u"Close", None))
+#endif // QT_CONFIG(tooltip)
         self.btn_close.setText("")
         self.file.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
         self.edition.setText(QCoreApplication.translate("MainWindow", u"Ediccion", None))

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QPlainTextEdit, QApplication, QTextEdit
-from PyQt5.QtGui import QColor, QTextCharFormat, QTextFormat, QPainter
+from PyQt5.QtGui import QColor, QFont, QTextCharFormat, QTextFormat, QPainter
 from PyQt5.QtCore import QRect, pyqtSlot, Qt
 
 
@@ -36,7 +36,8 @@ class CodeEditor(QPlainTextEdit):
 		while block.isValid() and top <= event.rect().bottom():
 			if block.isVisible() and bottom >= event.rect().top():
 				number = str(blockNumber + 1)
-				painter.setPen(QColor(255, 255, 255, 200))
+				painter.setPen(QColor(255, 255, 255, 95))
+				painter.setFont(QFont('consolas', 12))
 				painter.drawText(0, top, self.lineNumberArea.width(), 
 					self.fontMetrics().height(),
 					Qt.AlignRight, number)
@@ -64,11 +65,8 @@ class CodeEditor(QPlainTextEdit):
 		extraSelections = []
 		if not self.isReadOnly():
 			selection = QTextEdit.ExtraSelection()
-			lineColor = QColor(77, 80, 89, 255)
-			lineColor2 = QColor(255, 255, 255, 200)
+			lineColor = QColor(255, 255, 255, 10)
 			selection.format.setBackground(lineColor)
-			selection.format.setForeground(lineColor2)
-			selection.format.setToolTip("Truedghfgh h hf fh")
 			selection.format.setProperty(QTextFormat.FullWidthSelection, True)
 			selection.cursor = self.textCursor()
 			selection.cursor.clearSelection()

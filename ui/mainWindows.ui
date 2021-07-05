@@ -163,14 +163,15 @@ image: url(:/icons/assets/icons/resize.png);
 ScrollBars */
  QScrollBar:vertical {
 	border: none;
-    background: rgba(255, 255, 255, 35);
-    width: 20px;
+    background: transparent;
+    width: 15px;
     margin: 0px;
+border-left: 1px solid rgba(255, 255, 255, 35);
  }
 
 
  QScrollBar::handle:vertical {	
-	background: rgba(255, 255, 255, 175);
+	background: rgba(255, 255, 255, 35);
     min-height: 25px;
  }
  QScrollBar::add-line:vertical {
@@ -195,7 +196,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
 
 /* ///////////////////////////////////////////////////////////////////////////////////////////////// */</string>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="AppMargins">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -287,7 +288,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
            <widget class="QFrame" name="file_1">
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -346,6 +347,8 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
               </widget>
              </item>
             </layout>
+            <zorder>btn_close_1</zorder>
+            <zorder>title_1</zorder>
            </widget>
           </item>
          </layout>
@@ -418,6 +421,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="toolTip">
+             <string>Minimize</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -440,6 +446,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="toolTip">
+             <string>Maximize</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -461,6 +470,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: n
             </property>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="toolTip">
+             <string>Close</string>
             </property>
             <property name="text">
              <string/>
